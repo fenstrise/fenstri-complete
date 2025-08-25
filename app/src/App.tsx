@@ -1,21 +1,23 @@
 import { Suspense } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AuthProvider } from './lib/auth'
 
 // Layout Components
 import { Layout } from './components/Layout'
 import { ProtectedRoute } from './components/ProtectedRoute'
 
-// Auth Pages
-import { LoginPage } from './pages/auth/LoginPage'
-import { RegisterPage } from './pages/auth/RegisterPage'
-
 // Public Pages
-import { HomePage } from './pages/public/HomePage'
-import { ServicesPage } from './pages/public/ServicesPage'
-import { IndustryPage } from './pages/public/IndustryPage'
-import { LocationPage } from './pages/public/LocationPage'
-import { ContactPage } from './pages/public/ContactPage'
+import HomePage from './pages/public/HomePage'
+import AboutPage from './pages/public/AboutPage'
+import ServicesPage from './pages/public/ServicesPage'
+import IndustryPage from './pages/public/IndustryPage'
+import LocationPage from './pages/public/LocationPage'
+import ContactPage from './pages/public/ContactPage'
+
+// Auth Pages
+import LoginPage from './pages/auth/LoginPage'
+import RegisterPage from './pages/auth/RegisterPage'
 
 // Customer Portal
 import { CustomerDashboard } from './pages/portal/customer/CustomerDashboard'
