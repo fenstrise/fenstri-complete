@@ -8,16 +8,16 @@ import { Layout } from './components/Layout'
 import { ProtectedRoute } from './components/ProtectedRoute'
 
 // Public Pages
-import HomePage from './pages/public/HomePage'
-import AboutPage from './pages/public/AboutPage'
-import ServicesPage from './pages/public/ServicesPage'
-import IndustryPage from './pages/public/IndustryPage'
-import LocationPage from './pages/public/LocationPage'
-import ContactPage from './pages/public/ContactPage'
+import { HomePage } from './pages/public/HomePage'
+import { AboutPage } from './pages/public/AboutPage'
+import { ServicesPage } from './pages/public/ServicesPage'
+import { IndustryPage } from './pages/public/IndustryPage'
+import { LocationPage } from './pages/public/LocationPage'
+import { ContactPage } from './pages/public/ContactPage'
 
 // Auth Pages
-import LoginPage from './pages/auth/LoginPage'
-import RegisterPage from './pages/auth/RegisterPage'
+import { LoginPage } from './pages/auth/LoginPage'
+import { RegisterPage } from './pages/auth/RegisterPage'
 
 // Customer Portal
 import { CustomerDashboard } from './pages/portal/customer/CustomerDashboard'
