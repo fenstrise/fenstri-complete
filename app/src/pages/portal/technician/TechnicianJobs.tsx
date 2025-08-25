@@ -56,9 +56,9 @@ export function TechnicianJobs() {
           properties (name, address_line1, city)
         `)
         .eq('assigned_to', profile?.id)
-        .order('scheduled_at', { ascending: true, nullsLast: true })
+        .order('scheduled_at', { ascending: true })
 
-      return data as WorkOrder[]
+      return data as any
     },
     enabled: !!profile?.id
   })

@@ -19,7 +19,7 @@ interface WorkOrderDetail {
 
 export function TechnicianWorkOrderDetail() {
   const { id } = useParams()
-  const [workOrder, setWorkOrder] = useState<WorkOrderDetail | null>(null)
+  const [workOrder, setWorkOrder] = useState<any | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

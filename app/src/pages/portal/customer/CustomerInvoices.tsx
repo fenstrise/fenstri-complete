@@ -58,7 +58,7 @@ export function CustomerInvoices() {
         .eq('org_id', profile?.org_id)
         .order('created_at', { ascending: false })
 
-      return data as Invoice[]
+      return data as any
     },
     enabled: !!profile?.org_id
   })

@@ -42,7 +42,7 @@ export function TechnicianWorkOrders() {
         .eq('status', 'scheduled')
 
       if (error) throw error
-      setWorkOrders(data || [])
+      return data as any
     } catch (error) {
       console.error('Error fetching work orders:', error)
     } finally {

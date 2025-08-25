@@ -90,6 +90,7 @@ export function AuthProvider({ children }: { children: any }) {
       password,
     })
     if (error) throw error
+    return { error: null }
   }
 
   const signUp = async (email: string, password: string, userData: any) => {
@@ -114,6 +115,7 @@ export function AuthProvider({ children }: { children: any }) {
 
       if (profileError) throw profileError
     }
+    return { error: null }
   }
 
   const signOut = async () => {
