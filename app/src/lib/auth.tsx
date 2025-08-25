@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
-import { User, Session } from '@supabase/supabase-js'
+import { createContext, useContext, useEffect, useState } from 'react'
+import { User, Session, AuthChangeEvent } from '@supabase/supabase-js'
 import { supabase } from './supabase'
 
 interface Profile {
@@ -18,15 +18,15 @@ interface AuthContextType {
   profile: Profile | null
   session: Session | null
   loading: boolean
-  signIn: (email: string, password: string) => Promise<{ error: any }>
-  signUp: (email: string, password: string, fullName?: string) => Promise<{ error: any }>
+  signIn: (email: string, password: string) => Promise<void>
+  signUp: (email: string, password: string, userData: any) => Promise<void>
   signOut: () => Promise<void>
-  updateProfile: (updates: Partial<Profile>) => Promise<{ error: any }>
+  updateProfile: (updates: Partial<Profile>) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({ children }: { children: any }) {
   const [user, setUser] = useState<User | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [session, setSession] = useState<Session | null>(null)
@@ -55,7 +55,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setProfile(null)
         setLoading(false)
       }
-    })
+    }
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(handleAuthStateChange)
 
     return () => subscription.unsubscribe()
   }, [])
@@ -68,9 +70,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .eq('id', userId)
         .single()
 
-      if (error) {
-        console.error('Error fetching profile:', error)
-      } else {
+      if (error && error.code !== 'PGRST116') {
+        throw error
+      }
+
+      if (data) {
         setProfile(data)
       }
     } catch (error) {
@@ -85,39 +89,49 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       email,
       password,
     })
-    return { error }
+    if (error) throw error
   }
 
-  const signUp = async (email: string, password: string, fullName?: string) => {
-    const { error } = await supabase.auth.signUp({
+  const signUp = async (email: string, password: string, userData: any) => {
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: {
-        data: {
-          full_name: fullName,
-        },
-      },
     })
-    return { error }
+
+    if (error) throw error
+
+    if (data.user) {
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .insert({
+          id: data.user.id,
+          email: data.user.email,
+          full_name: userData.full_name,
+          phone: userData.phone,
+          role: userData.role || 'customer',
+          org_id: userData.org_id,
+        })
+
+      if (profileError) throw profileError
+    }
   }
 
   const signOut = async () => {
-    await supabase.auth.signOut()
+    const { error } = await supabase.auth.signOut()
+    if (error) throw error
   }
 
   const updateProfile = async (updates: Partial<Profile>) => {
-    if (!user) return { error: new Error('No user') }
+    if (!user) throw new Error('No user logged in')
 
     const { error } = await supabase
       .from('profiles')
       .update(updates)
       .eq('id', user.id)
 
-    if (!error) {
-      setProfile(prev => prev ? { ...prev, ...updates } : null)
-    }
+    if (error) throw error
 
-    return { error }
+    setProfile(prev => prev ? { ...prev, ...updates } : null)
   }
 
   const value = {
