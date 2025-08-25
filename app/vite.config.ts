@@ -5,7 +5,7 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: process.env.VITE_BASE_PATH || '/',
+  base: process.env.NODE_ENV === 'production' ? '/fenstri-complete/' : '/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -14,6 +14,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
+    assetsDir: 'assets',
   },
   server: {
     port: 5173,
