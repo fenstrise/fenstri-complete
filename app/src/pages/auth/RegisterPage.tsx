@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../lib/auth'
 import { Eye, EyeOff } from 'lucide-react'
 
 export function RegisterPage() {
   const { signUp } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -14,6 +15,13 @@ export function RegisterPage() {
     role: 'customer',
     phone: ''
   })
+
+  useEffect(() => {
+    const roleParam = searchParams.get('role')
+    if (roleParam && ['customer', 'technician', 'dispatcher', 'admin'].includes(roleParam)) {
+      setFormData(prev => ({ ...prev, role: roleParam }))
+    }
+  }, [searchParams])
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')

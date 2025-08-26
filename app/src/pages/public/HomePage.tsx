@@ -36,9 +36,14 @@ export function HomePage() {
               Wartung, Reparatur und Inspektion Ihrer Fenster mit modernster Technologie
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/register" className="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                Kostenlos starten
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link to="/register?role=customer" className="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                  Als Kunde registrieren
+                </Link>
+                <Link to="/register?role=technician" className="bg-primary-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-400 transition-colors">
+                  Als Techniker registrieren
+                </Link>
+              </div>
               <Link to="/services" className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary-600 transition-colors">
                 Services entdecken
               </Link>
@@ -181,9 +186,14 @@ export function HomePage() {
           <p className="text-xl mb-8 text-primary-100">
             Starten Sie noch heute mit unserem kostenlosen Service
           </p>
-          <Link to="/register" className="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center">
-            Jetzt registrieren <ArrowRight className="w-5 h-5 ml-2" />
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/register?role=customer" className="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center">
+              Als Kunde registrieren <ArrowRight className="w-5 h-5 ml-2" />
+            </Link>
+            <Link to="/register?role=technician" className="bg-primary-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-400 transition-colors inline-flex items-center">
+              Als Techniker registrieren <ArrowRight className="w-5 h-5 ml-2" />
+            </Link>
+          </div>
         </div>
       </section>
 

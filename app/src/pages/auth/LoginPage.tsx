@@ -17,12 +17,24 @@ export function LoginPage() {
     setLoading(true)
     setError('')
 
-    const { error } = await signIn(email, password)
+    try {
+      const { error } = await signIn(email, password)
 
-    if (error) {
-      setError('Ungültige Anmeldedaten. Bitte versuchen Sie es erneut.')
-    } else {
-      navigate('/portal')
+      if (error) {
+        console.error('Login error:', error)
+        if (error.message?.includes('Email not confirmed')) {
+          setError('Bitte bestätigen Sie Ihre E-Mail-Adresse bevor Sie sich anmelden.')
+        } else if (error.message?.includes('Invalid login credentials')) {
+          setError('Ungültige Anmeldedaten. Bitte überprüfen Sie E-Mail und Passwort.')
+        } else {
+          setError('Anmeldefehler: ' + (error.message || 'Unbekannter Fehler'))
+        }
+      } else {
+        navigate('/portal')
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err)
+      setError('Ein unerwarteter Fehler ist aufgetreten.')
     }
 
     setLoading(false)

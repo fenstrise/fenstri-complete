@@ -85,37 +85,52 @@ export function AuthProvider({ children }: { children: any }) {
   }
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-    if (error) throw error
-    return { error: null }
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+      if (error) throw error
+      return { error: null }
+    } catch (error) {
+      return { error }
+    }
   }
 
   const signUp = async (email: string, password: string, userData: any) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    })
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/portal`
+        }
+      })
 
-    if (error) throw error
+      if (error) throw error
 
-    if (data.user) {
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          id: data.user.id,
-          email: data.user.email,
-          full_name: userData.full_name,
-          phone: userData.phone,
-          role: userData.role || 'customer',
-          org_id: userData.org_id,
-        })
+      if (data.user) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert({
+            id: data.user.id,
+            email: data.user.email,
+            full_name: userData.full_name,
+            phone: userData.phone,
+            role: userData.role || 'customer',
+            org_id: userData.org_id,
+          })
 
-      if (profileError) throw profileError
+        if (profileError) {
+          console.error('Profile creation error:', profileError)
+          throw profileError
+        }
+      }
+      return { error: null }
+    } catch (error) {
+      console.error('SignUp error:', error)
+      return { error }
     }
-    return { error: null }
   }
 
   const signOut = async () => {
