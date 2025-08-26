@@ -10,7 +10,9 @@ export function RegisterPage() {
     email: '',
     password: '',
     confirmPassword: '',
-    fullName: ''
+    fullName: '',
+    role: 'customer',
+    phone: ''
   })
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -34,7 +36,11 @@ export function RegisterPage() {
       return
     }
 
-    const { error } = await signUp(formData.email, formData.password, formData.fullName)
+    const { error } = await signUp(formData.email, formData.password, {
+      full_name: formData.fullName,
+      phone: formData.phone,
+      role: formData.role
+    })
 
     if (error) {
       setError('Fehler bei der Registrierung. Bitte versuchen Sie es erneut.')
@@ -183,6 +189,41 @@ export function RegisterPage() {
                 value={formData.confirmPassword}
                 onChange={handleChange}
               />
+            </div>
+
+            <div>
+              <label htmlFor="phone" className="form-label">
+                Telefonnummer
+              </label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                autoComplete="tel"
+                className="form-input"
+                placeholder="+49 123 456789"
+                value={formData.phone}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="role" className="form-label">
+                Rolle *
+              </label>
+              <select
+                id="role"
+                name="role"
+                required
+                className="form-input"
+                value={formData.role}
+                onChange={handleChange}
+              >
+                <option value="customer">Kunde</option>
+                <option value="technician">Techniker</option>
+                <option value="dispatcher">Dispatcher</option>
+                <option value="admin">Administrator</option>
+              </select>
             </div>
           </div>
 
